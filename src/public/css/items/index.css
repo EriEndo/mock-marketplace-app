@@ -1,0 +1,145 @@
+.items-container {
+    width: 100%;
+    max-width: 1600px;
+    margin: 20px auto;
+    padding: 0;
+}
+
+/* --- タブ --- */
+.items-tabs {
+    display: flex;
+    gap: 40px;
+    height: 60px;
+    padding: 0 0 0 100px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ccc;
+    align-items: center;
+    position: sticky;
+    top: 70px;
+    z-index: 900;
+    background-color: #fff;
+}
+
+.items-tab {
+    font-size: 18px;
+    color: #555;
+    text-decoration: none;
+    line-height: 60px;
+    height: 60px;
+    display: inline-block;
+}
+
+.items-tab.active {
+    color: red;
+}
+
+/* --- 商品カード --- */
+.items-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    margin: 20px;
+    min-height: 200px;
+}
+
+.item-card {
+    flex: 0 0 calc(25% - 30px);
+    min-width: 240px;
+    text-decoration: none;
+    color: #000;
+}
+
+.item-card__image-wrapper {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    background: #eee;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    position: relative;
+}
+
+.item-card__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.item-card__image--placeholder {
+    font-size: 14px;
+    color: #ddd;
+}
+
+.item-card__name {
+    margin-top: 10px;
+    font-size: 16px;
+    text-align: left;
+}
+
+.item-card__sold {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.656); /* 半透明の黒背景 */
+    color: #fff;
+    padding: 14px 28px;
+    font-size: 40px;
+    font-weight: bold;
+    border-radius: 8px;
+    z-index: 10;
+    letter-spacing: 2px;
+}
+
+@media screen and (min-width: 1400px) and (max-width: 1540px) {
+    .items-container {
+        max-width: 1540px;
+        padding: 0 30px;
+    }
+
+    .items-list {
+        gap: 24px;
+    }
+
+    .item-card {
+        width: calc(25% - 24px);
+    }
+
+    .items-tab {
+        font-size: 17px;
+    }
+}
+
+@media screen and (min-width: 768px) and (max-width: 850px) {
+    .items-container {
+        max-width: 90%;
+        padding: 0 10px;
+    }
+
+    .items-tabs {
+        gap: 20px;
+        height: 50px;
+        padding-left: 10px;
+    }
+
+    .items-tab {
+        line-height: 50px;
+        height: 50px;
+        font-size: 16px;
+    }
+
+    .item-card {
+        flex: 0 0 calc(33.333% - 20px);
+        min-width: 0;
+    }
+
+    .items-list {
+        gap: 20px;
+    }
+
+    /* 文字少し小さめ */
+    .item-card__name {
+        font-size: 15px;
+    }
+}

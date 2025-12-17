@@ -1,0 +1,348 @@
+/* レイアウト */
+.item-detail {
+    width: 100%;
+    max-width: 1540px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.item-detail__main {
+    display: flex;
+    gap: 50px;
+    align-items: flex-start;
+}
+
+.item-detail__image-wrapper {
+    width: 480px;
+    height: 480px;
+    background: #cacaca;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.item-detail__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.item-detail__image-placeholder {
+    width: 100%;
+    height: 100%;
+    background: #cacaca;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #555;
+    font-size: 18px;
+}
+
+/* SOLDバッジ */
+.item-card__sold {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.55);
+    color: #fff;
+    padding: 14px 40px;
+    font-size: 28px;
+    border-radius: 4px;
+}
+
+.item-detail__info {
+    width: 480px;
+    align-items: flex-start;
+}
+
+.item-detail__name {
+    font-size: 30px;
+    margin: 0;
+}
+
+.item-detail__brand {
+    font-size: 14px;
+    margin-top: 0;
+    height: 14px;
+}
+
+.item-detail__price {
+    font-size: 26px;
+    margin: 10px 0;
+}
+
+.item-detail__price-mark,
+.item-detail__price-tax {
+    font-size: 14px;
+}
+
+.item-detail__price-tax {
+    margin-left: 4px;
+}
+
+.item-detail__meta {
+    margin-top: 5px;
+    display: flex;
+    gap: 30px;
+}
+
+.item-detail__meta-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.item-detail__meta-item:first-child {
+    margin-left: 30px;
+}
+
+.item-detail__icon-box {
+    width: 26px;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.item-detail__icon-image {
+    width: 22px;
+    height: 22px;
+    object-fit: contain;
+}
+
+.item-detail__meta-count {
+    font-size: 10px;
+    font-weight: bold;
+}
+
+.like-button {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    width: 26px;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.like-button:focus {
+    outline: none;
+}
+
+/* 購入ボタン */
+.item-detail__purchase {
+    margin-top: 10px;
+}
+
+.item-detail__purchase-button {
+    display: inline-block;
+    background: #ff5555;
+    color: #fff;
+    width: 70%;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 3px;
+    font-size: 16px;
+    font-weight: 500;
+    text-decoration: none;
+    width: 330px;
+}
+
+.item-detail__section {
+    display: block;
+    margin-top: 35px;
+}
+
+.item-detail__section-title {
+    font-size: 22px;
+    padding-bottom: 6px;
+    margin-bottom: 5px;
+}
+
+.item-detail__section:last-of-type .item-detail__section-title {
+    color: #5f5f5f;
+}
+
+.item-detail__description {
+    font-size: 14px;
+    line-height: 1.7;
+    white-space: pre-line;
+    padding: 0;
+    margin: 0;
+}
+
+.item-detail__attributes-list dt {
+    font-weight: bold;
+    width: 80px;
+    margin-bottom: 10px;
+}
+
+.item-detail__attributes-list dd {
+    font-size: 14px;
+    margin-bottom: 10px;
+    flex: 1;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.item-detail__attributes-row {
+    display: flex;
+    margin-bottom: 12px;
+    align-items: flex-start;
+}
+
+.item-detail__tag {
+    display: inline-flex;
+    align-items: center;
+    background: #d9d9d9;
+    padding: 2px 15px;
+    border-radius: 10px;
+    font-size: 14px;
+    margin-right: 6px;
+    white-space: nowrap;
+}
+
+.item-detail__comments {
+    margin-bottom: 20px;
+}
+
+.item-comment {
+    width: auto;
+    padding: 12px 0;
+    border-radius: 6px;
+    margin-bottom: 15px;
+}
+
+.item-comment__header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.item-comment__avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: #ccc;
+    overflow: hidden;
+}
+
+.item-comment__avatar-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.item-comment__user-name {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.item-comment__body {
+    margin-top: 8px;
+    padding: 10px;
+    box-sizing: border-box;
+    width: 330px;
+    font-size: 14px;
+    background: #e5e5e5;
+}
+
+.item-detail__comment-form {
+    width: 330px;
+}
+
+.item-detail__comment-form-title {
+    margin-bottom: 10px;
+}
+
+.item-detail__comment-textarea {
+    width: 330px;
+    padding: 10px;
+    box-sizing: border-box;
+    resize: vertical;
+    font-size: 14px;
+    border: 1px solid #000;
+    border-radius: 1px;
+    margin-bottom: 20px;
+    height: 150px;
+}
+
+.item-detail__comment-submit {
+    cursor: pointer;
+    display: inline-block;
+    background: #ff5555;
+    color: #fff;
+    width: 100%;
+    text-align: center;
+    padding: 5px 10px;
+    box-sizing: border-box;
+    border-radius: 3px;
+    font-size: 16px;
+    text-decoration: none;
+    border: none;
+}
+
+.item-detail__error-message {
+    color: red;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+@media (min-width: 1400px) and (max-width: 1540px) {
+    .item-detail__main {
+        gap: 40px;
+    }
+
+    .item-detail__image-wrapper {
+        width: 460px;
+        height: 460px;
+    }
+
+    .item-detail__info {
+        width: 460px;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 850px) {
+    .item-detail__main {
+        flex-direction: row;
+        gap: 20px;
+    }
+
+    .item-detail__image-wrapper {
+        width: 45%;
+        height: auto;
+        aspect-ratio: 1 / 1;
+    }
+
+    .item-detail__image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .item-detail__info {
+        width: 45%;
+    }
+
+    .item-detail__purchase-button,
+    .item-comment__body,
+    .item-detail__comment-form,
+    .item-detail__comment-textarea,
+    .item-detail__comment-submit {
+        width: 100%;
+        max-width: 350px;
+        box-sizing: border-box;
+    }
+
+    .item-detail__tag {
+        font-size: 12px;
+        padding: 2px 10px;
+    }
+}

@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
+use App\Models\Profile;
 
 class UserFactory extends Factory
 {
@@ -21,6 +22,34 @@ class UserFactory extends Factory
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
             'remember_token' => Str::random(10),
         ];
+    }
+
+    // プロフィール完成ユーザー
+    public function withProfile()
+    {
+        return $this->has(
+            Profile::factory()->state(
+                fn($_, $user) => [
+                    'username' => $user->name,
+                ]
+            ),
+            'profile'
+        );
+    }
+
+    // プロフィール未完成ユーザー
+    public function withIncompleteProfile()
+    {
+        return $this->has(
+            Profile::factory()
+                ->incomplete()
+                ->state(
+                    fn($_, $user) => [
+                        'username' => $user->name,
+                    ]
+                ),
+            'profile'
+        );
     }
 
     /**

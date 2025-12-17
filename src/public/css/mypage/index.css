@@ -1,0 +1,182 @@
+.mypage-container {
+    max-width: 1540px;
+    margin: 80px auto;
+    padding: 0 40px;
+    box-sizing: border-box;
+}
+
+.mypage-tabs--sticky {
+    position: sticky;
+    top: 70px; /* グローバルヘッダー高さ */
+    z-index: 50;
+    background: #fff;
+
+    /* 安定化 */
+    height: 48px; /* 明示的に固定 */
+    display: flex;
+    align-items: center;
+}
+
+.mypage-profile {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 40px;
+}
+
+.mypage-profile-left {
+    display: flex;
+    align-items: center;
+    gap: 80px;
+    margin-left: 150px;
+}
+
+.mypage-profile-image {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: #ddd;
+}
+
+.mypage-profile-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profile-placeholder {
+    width: 100%;
+    height: 100%;
+    background: #d9d9d9;
+    border-radius: 50%;
+}
+
+.mypage-username {
+    font-size: 18px;
+    font-weight: bold;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.profile-edit-button {
+    padding: 4px 20px;
+    margin-right: 150px;
+    border: 1px solid #ff5555;
+    color: #ff5555;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 4px;
+}
+
+.profile-edit-button:hover {
+    cursor: pointer;
+}
+
+.mypage-tabs {
+    display: flex;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 30px;
+}
+
+.mypage-tab {
+    padding: 12px 0;
+    font-size: 16px;
+    font-weight: 500;
+    color: #555;
+    text-decoration: none;
+    margin-left: 60px;
+}
+
+.mypage-tab.active {
+    color: red;
+}
+
+.mypage-items {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 30px;
+    padding-top: 24px;
+}
+
+.mypage-item {
+    text-decoration: none;
+    color: #000;
+}
+
+.mypage-item-image {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    background: #e0e0e0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mypage-item-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.mypage-item-image {
+    position: relative;
+}
+
+.item-sold-badge {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 8px 20px;
+    border-radius: 4px;
+    pointer-events: none;
+}
+
+.mypage-item-name {
+    margin-top: 8px;
+    font-size: 14px;
+}
+
+.mypage-empty {
+    font-size: 14px;
+    color: #777;
+}
+
+@media screen and (max-width: 850px) {
+    .mypage-container {
+        padding: 0 20px;
+    }
+
+    .mypage-profile-left {
+        gap: 40px;
+        margin-left: 120px;
+    }
+
+    .mypage-profile-image {
+        width: 80px;
+        height: 80px;
+        flex-shrink: 0;
+    }
+
+    .profile-edit-button {
+        margin-right: 50px;
+        padding: 4px 12px;
+        font-size: 12px;
+        white-space: nowrap;
+    }
+
+    .mypage-tabs--sticky {
+        top: 50px;
+    }
+
+    .mypage-items {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
