@@ -91,6 +91,34 @@ php artisan storage:link
 sudo chmod -R 777 src/storage
 ```
 
+## テスト環境（.env.testing）
+
+本アプリでは、テスト環境用に `.env.testing` を使用します。
+
+### テスト環境用設定ファイルの作成
+
+```bash
+cp src/.env.testing.example src/.env.testing
+```
+
+### アプリケーションキーの生成（テスト環境）
+
+```bash
+php artisan key:generate --env=testing
+```
+
+### Stripe 設定
+
+本アプリでは Stripe を利用した購入処理を実装していますが、
+Stripe の Secret Key はリポジトリには含めていません。
+テスト環境で購入処理を確認する場合は各自で取得した Stripe のテスト用 Secret Key を
+.env.testing に設定してください。
+※ .env.testing.example にはダミー値のみを記載しています。
+
+```text
+STRIPE_SECRET=your_stripe_secret_key
+```
+
 ## ログイン情報
 
 本アプリでは、管理者専用の機能は実装していないため、
