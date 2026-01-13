@@ -8,13 +8,10 @@
 <div class="items-container">
 
     <div class="items-tabs">
-        <a href="/?tab=recommend&keyword={{ request('keyword') }}"
-            class="items-tab {{ $tab !== 'mylist' ? 'active' : '' }}">
+        <a href="/?keyword={{ request('keyword') }}" class="items-tab {{ $tab !== 'mylist' ? 'active' : '' }}">
             おすすめ
         </a>
-
-        <a href="/?tab=mylist&keyword={{ request('keyword') }}"
-            class="items-tab {{ $tab === 'mylist' ? 'active' : '' }}">
+        <a href="/?tab=mylist&keyword={{ request('keyword') }}" class="items-tab {{ $tab === 'mylist' ? 'active' : '' }}">
             マイリスト
         </a>
     </div>

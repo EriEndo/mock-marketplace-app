@@ -16,8 +16,6 @@ class Like extends Model
         'item_id',
     ];
 
-    // リレーション
-
     public function user()
     {
         return $this->belongsTo(User::class);

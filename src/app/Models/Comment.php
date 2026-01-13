@@ -17,9 +17,6 @@ class Comment extends Model
         'content',
     ];
 
-
-    // リレーション
-
     public function user()
     {
         return $this->belongsTo(User::class);

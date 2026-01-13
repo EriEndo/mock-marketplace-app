@@ -24,9 +24,7 @@
                 @if (!request()->is('login') && !request()->is('register'))
                 <form action="/search" method="get" class="header-search-form">
                     <input type="hidden" name="tab" value="{{ request('tab') }}">
-                    <input type="text" name="keyword" class="header-search-input"
-                        placeholder="なにをお探しですか？"
-                        value="{{ request('keyword') }}">
+                    <input type="text" name="keyword" class="header-search-input" placeholder="なにをお探しですか？" value="{{ request('keyword') }}">
                 </form>
                 @endif
             </div>

@@ -31,28 +31,22 @@ class FortifyServiceProvider extends ServiceProvider
 
     public function boot()
     {
-        // 会員登録処理
         Fortify::createUsersUsing(CreateNewUser::class);
 
-        // 会員登録画面
         Fortify::registerView(function () {
             return view('auth.register');
         });
 
-        // ログイン画面
         Fortify::loginView(function () {
             return view('auth.login');
         });
 
-        // ログインのレート制限
         RateLimiter::for('login', function (Request $request) {
             return Limit::perMinute(10)->by($request->email . $request->ip());
         });
 
-        // LoginRequestにすり替え
         $this->app->bind(FortifyLoginRequest::class, LoginRequest::class);
 
-        // ログインエラーメッセージ
         Fortify::authenticateUsing(function ($request) {
 
             $user = User::where('email', $request->email)->first();
@@ -66,10 +60,7 @@ class FortifyServiceProvider extends ServiceProvider
             return $user;
         });
 
-        // ログイン後の遷移先をカスタム
         $this->app->singleton(LoginResponseContract::class, LoginResponse::class);
-
-        // 会員登録後の遷移先をカスタム
         $this->app->singleton(RegisterResponseContract::class, RegisterResponse::class);
     }
 }

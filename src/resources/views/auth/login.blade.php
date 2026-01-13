@@ -23,31 +23,24 @@
 
                 <div class="form__group">
                     <label class="form__label" for="email">メールアドレス</label>
-                    <input
-                        class="form__input"
-                        type="text"
-                        name="email"
-                        id="email"
-                        value="{{ old('email') }}">
+                    <input class="form__input" type="text" name="email" id="email" value="{{ old('email') }}">
+
+                    @error('email')
                     <p class="form__error">
-                        @error('email')
                         {{ $message }}
-                        @enderror
                     </p>
+                    @enderror
                 </div>
 
                 <div class="form__group">
                     <label class="form__label" for="password">パスワード</label>
-                    <input
-                        class="form__input"
-                        type="password"
-                        name="password"
-                        id="password">
+                    <input class="form__input" type="password" name="password" id="password">
+
+                    @error('password')
                     <p class="form__error">
-                        @error('password')
                         {{ $message }}
-                        @enderror
                     </p>
+                    @enderror
                 </div>
 
                 <input class="form__btn" type="submit" value="ログインする">

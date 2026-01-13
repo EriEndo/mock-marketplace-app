@@ -59,9 +59,19 @@
                 </div>
 
                 <div class="item-detail__purchase">
-                    <a href="/purchase/{{ $item->id }}" class="item-detail__purchase-button">
+                    @if ($item->purchase)
+                    <button class="item-detail__purchase-button item-detail__purchase-button--disabled" disabled>
+                        SOLD
+                    </button>
+                    @elseif ($item->user_id === Auth::id())
+                    <button class="item-detail__purchase-button item-detail__purchase-button--disabled" disabled>
+                        出品した商品は購入できません
+                    </button>
+                    @else
+                    <a href="{{ route('purchase.form', $item->id) }}" class="item-detail__purchase-button">
                         購入手続きへ
                     </a>
+                    @endif
                 </div>
             </div>
 
@@ -100,10 +110,7 @@
                         <div class="item-comment__header">
                             <div class="item-comment__avatar">
                                 @if (!empty($comment->user->profile->profile_image))
-                                <img
-                                    src="{{ asset('storage/' . $comment->user->profile->profile_image) }}"
-                                    alt="プロフィール画像"
-                                    class="item-comment__avatar-image">
+                                <img src="{{ asset('storage/' . $comment->user->profile->profile_image) }}" alt="プロフィール画像" class="item-comment__avatar-image">
                                 @endif
                             </div>
                             <span class="item-comment__user-name"> {{ $comment->user->profile->username }}</span>
@@ -120,12 +127,11 @@
 
                     <form action="/item/{{ $item->id }}/comment" method="post">
                         @csrf
-                        <textarea
-                            name="content"
-                            class="item-detail__comment-textarea"
-                            rows="4">{{ old('content') }}</textarea>
+                        <textarea name="content" class="item-detail__comment-textarea" rows="4">{{ old('content') }}</textarea>
                         @error('content')
-                        <p class="item-detail__error-message">{{ $message }}</p>
+                        <p class="item-detail__error-message">
+                            {{ $message }}
+                        </p>
                         @enderror
 
                         <button type="submit" class="item-detail__comment-submit">コメントを送信する</button>

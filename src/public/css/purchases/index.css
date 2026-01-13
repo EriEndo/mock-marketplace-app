@@ -120,10 +120,13 @@
 }
 
 .purchase-address-link {
+    background: none;
+    border: none;
+    text-decoration: none;
+    padding: 0;
     font-size: 13px;
     color: #007bff;
-    text-decoration: none;
-    margin-right: 30px;
+    cursor: pointer;
 }
 
 .purchase-address {
@@ -179,20 +182,6 @@
     cursor: pointer;
 }
 
-/* ==========================================================
-    PC（1400px〜1540px）
-==========================================================*/
-@media screen and (min-width: 1400px) and (max-width: 1540px) {
-    .purchase-right {
-        position: sticky;
-        top: 120px;
-        align-self: flex-start;
-    }
-}
-
-/* ==========================================================
-    タブレット（768px〜850px）
-==========================================================*/
 @media screen and (min-width: 768px) and (max-width: 850px) {
     .purchase-container {
         margin: 60px auto;
@@ -205,7 +194,6 @@
         gap: 40px;
     }
 
-    /* 左右解除 */
     .purchase-left {
         width: 100%;
         order: 1;
@@ -247,7 +235,7 @@
     .purchase-select {
         width: 100%;
         height: 32px;
-        padding-right: 28px; /* ▼分の余白 */
+        padding-right: 28px;
         box-sizing: border-box;
     }
 

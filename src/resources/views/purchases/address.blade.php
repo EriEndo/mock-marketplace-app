@@ -19,14 +19,11 @@
 
                 <div class="form__group">
                     <label for="postal_code" class="form__label">郵便番号</label>
-                    <input
-                        type="text"
-                        name="postal_code"
-                        id="postal_code"
-                        class="form__input"
-                        value="{{ old('postal_code', $address['postal_code']) }}">
+                    <input type="text" name="postal_code" id="postal_code" class="form__input" value="{{ old('postal_code', $address['postal_code']) }}">
                     @error('postal_code')
-                    <p class="form__error">{{ $message }}</p>
+                    <p class="form__error">
+                        {{ $message }}
+                    </p>
                     @enderror
                 </div>
 
@@ -35,7 +32,9 @@
                     <input type="text" name="address" id="address" class="form__input" value="{{ old('address', $address['address']) }}">
 
                     @error('address')
-                    <p class="form__error">{{ $message }}</p>
+                    <p class="form__error">
+                        {{ $message }}
+                    </p>
                     @enderror
                 </div>
 
@@ -45,6 +44,7 @@
                 </div>
 
                 <button type="submit" class="form__btn">更新する</button>
+                <input type="hidden" name="payment_method" value="{{ $paymentMethod }}">
             </form>
         </div>
     </div>

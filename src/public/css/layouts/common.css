@@ -10,7 +10,7 @@ body {
     display: flex;
     flex-direction: column;
     height: 100%;
-    padding-top: 30px;
+    padding-top: 70px;
 }
 
 .header {
@@ -18,7 +18,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px;
+    padding: 10px 20px;
     background-color: #000;
     color: #fff;
     height: 70px;
@@ -47,7 +47,6 @@ body {
     gap: 20px;
 }
 
-/* ロゴ */
 .header__heading {
     margin: 0;
     padding: 0;
@@ -60,7 +59,6 @@ body {
     object-fit: contain;
 }
 
-/* 検索フォーム */
 .header-search-form {
     width: 100%;
     max-width: 400px;
@@ -106,7 +104,7 @@ body {
     color: #fff;
     cursor: pointer;
     padding: 0;
-    font-size: 14px;
+    font-size: 13px;
     line-height: 1;
     vertical-align: middle;
 }
@@ -124,62 +122,33 @@ body {
     flex-grow: 1;
 }
 
-/* ==========================================================
-    PC（1400px〜1540px）
-==========================================================*/
-@media screen and (min-width: 1400px) and (max-width: 1540px) {
-    .header {
-        padding: 10px 0;
-        width: 100%;
-        box-sizing: border-box;
-        flex-shrink: 1;
-    }
-    .header-center {
-        flex: 0 0 350px;
-        min-width: 0;
-        max-width: 350px;
-    }
-
-    .header-search-form {
-        width: 100%;
-    }
-
-    .header-search-input {
-        height: 38px;
-        font-size: 14px;
-    }
-
-    .header-nav-list {
-        gap: 18px;
-        font-size: 12px;
-    }
-
-    .header-nav-button {
-        padding: 4px 10px;
-    }
-}
-
-/* ==========================================================
-    タブレット（768px〜850px）
-==========================================================*/
 @media screen and (min-width: 768px) and (max-width: 850px) {
+    html,
+    body {
+        overflow-x: hidden;
+    }
+
+    .app {
+        padding-top: 56px;
+    }
+
     .header {
         height: 56px;
         padding: 8px 12px;
-        gap: 4px;
+    }
+
+    .header-left,
+    .header-center,
+    .header-right {
+        min-width: 0;
     }
 
     .header__logo {
         height: 22px;
     }
 
-    .header-center {
-        flex: 0 0 240px;
-        min-width: 0;
-    }
-
     .header-search-form {
-        width: 100%;
+        max-width: 220px;
     }
 
     .header-search-input {
@@ -189,9 +158,12 @@ body {
     }
 
     .header-nav-list {
-        gap: 10px;
+        gap: 6px;
         font-size: 12px;
-        margin-left: auto;
+    }
+
+    .header-nav-link {
+        white-space: normal;
     }
 
     .header-nav-button {

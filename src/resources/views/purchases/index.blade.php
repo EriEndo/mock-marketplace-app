@@ -27,24 +27,25 @@
 
                     <div class="select-wrapper">
                         <select name="payment_method" class="purchase-select" id="payment_method">
-                            <option value="" disabled hidden {{ old('payment_method') ? '' : 'selected' }}>
+                            <option value="" disabled {{ empty($paymentMethod) ? 'selected' : '' }}>
                                 選択してください
                             </option>
-                            <option value="convenience">コンビニ払い</option>
-                            <option value="card">カード払い</option>
+                            <option value="konbini" {{ $paymentMethod === 'konbini' ? 'selected' : '' }}>コンビニ払い</option>
+                            <option value="card" {{ $paymentMethod === 'card' ? 'selected' : '' }}>カード払い</option>
                         </select>
+                        <input type="hidden" name="payment_method_hidden" id="payment_method_hidden" value="{{ $paymentMethod }}">
                     </div>
                     @error('payment_method')
-                    <p class="purchase-error">{{ $message }}</p>
+                    <p class="purchase-error">
+                        {{ $message }}
+                    </p>
                     @enderror
                 </div>
                 <hr>
                 <div class="purchase-section">
                     <div class="purchase-address-header">
                         <div class="purchase-section__title">配送先</div>
-                        <a href="{{ route('purchase.address.form', $item->id) }}" class="purchase-address-link">
-                            変更する
-                        </a>
+                        <button class="purchase-address-link" type=" submit" formaction="{{ route('purchase.address.form', $item->id) }}" formmethod="GET">変更する</button>
                     </div>
                     <p class="purchase-address">
                         〒{{ $address['postal_code'] }}<br>
@@ -66,9 +67,7 @@
                     </div>
                 </div>
 
-                <button type="submit" class="purchase-button">
-                    購入する
-                </button>
+                <button type="submit" class="purchase-button"> 購入する </button>
 
             </div>
         </div>
@@ -79,16 +78,16 @@
     document.addEventListener('DOMContentLoaded', function() {
         const select = document.getElementById('payment_method');
         const display = document.getElementById('payment_method_display');
-
         const labels = {
-            convenience: 'コンビニ払い',
+            konbini: 'コンビニ払い',
             card: 'カード払い',
         };
 
-        select.addEventListener('change', function() {
-            const value = select.value;
-            display.textContent = labels[value] ?? '未選択';
-        });
+        function updateDisplay() {
+            display.textContent = labels[select.value] ?? '未選択';
+        }
+        updateDisplay();
+        select.addEventListener('change', updateDisplay);
     });
 </script>
 @endsection

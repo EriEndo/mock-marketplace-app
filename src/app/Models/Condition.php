@@ -14,7 +14,6 @@ class Condition extends Model
         'name',
     ];
 
-    // リレーション
     public function items()
     {
         return $this->hasMany(Item::class);

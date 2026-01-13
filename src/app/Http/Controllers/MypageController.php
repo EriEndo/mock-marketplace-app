@@ -35,10 +35,11 @@ class MypageController extends Controller
         return view('mypage.index', compact('items', 'page'));
     }
 
-    public function editProfile()
+    public function editProfile(Request $request)
     {
         $profile = Auth::user()->profile;
-        return view('mypage.profile', compact('profile'));
+        $from = $request->query('from', 'mypage');
+        return view('mypage.profile', compact('profile', 'from'));
     }
 
     public function updateProfile(ProfileRequest $request)
@@ -55,6 +56,10 @@ class MypageController extends Controller
         $profile->address = $request->address;
         $profile->building = $request->building;
         $profile->save();
+
+        if ($request->from === 'first') {
+            return redirect()->route('items.index');
+        }
 
         return redirect()->route('mypage.index');
     }

@@ -29,16 +29,11 @@ class Item extends Model
 
     public function getImageUrlAttribute()
     {
-        // すでにURL（S3など）の場合
         if (Str::startsWith($this->image, ['http://', 'https://'])) {
             return $this->image;
         }
-
-        // storage（publicディスク）の場合
         return Storage::url($this->image);
     }
-
-    // リレーション
 
     public function user()
     {

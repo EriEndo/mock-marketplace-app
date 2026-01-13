@@ -3,26 +3,29 @@
 namespace App\Http\Responses;
 
 use Laravel\Fortify\Contracts\LoginResponse as LoginResponseContract;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 
 class LoginResponse implements LoginResponseContract
 {
     public function toResponse($request)
     {
-        $user = Auth::user();
+        $user = $request->user();
+
+        if ($user instanceof MustVerifyEmail && ! $user->hasVerifiedEmail()) {
+            return redirect()->route('verify.guide');
+        }
+
         $profile = $user->profile;
 
-        // プロフィール未設定なら強制遷移
         if (
-            !$profile ||
+            ! $profile ||
             empty($profile->username) ||
             empty($profile->postal_code) ||
             empty($profile->address)
         ) {
-            return redirect('/mypage/profile');
+            return redirect()->route('mypage.profile.edit', ['from' => 'first']);
         }
 
-        // 正常時の遷移先
         return redirect('/');
     }
 }

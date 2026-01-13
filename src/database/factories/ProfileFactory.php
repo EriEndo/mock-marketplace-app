@@ -6,16 +6,14 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ProfileFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array
-     */
     public function definition()
     {
         return [
             'username'      => $this->faker->name,
-            'profile_image' => '',
+            'profile_image' => $this->faker->randomElement([
+                'profile_images/banana.png',
+                'profile_images/grapes.png',
+            ]),
             'postal_code'   => $this->faker->numerify('###-####'),
             'address'       => $this->faker->prefecture . $this->faker->city . $this->faker->streetAddress,
             'building'      => $this->faker->randomElement([
@@ -27,11 +25,11 @@ class ProfileFactory extends Factory
         ];
     }
 
-    // プローフィール未設定者の挙動確認用
     public function incomplete()
     {
         return $this->state(function () {
             return [
+                'profile_image' => '',
                 'postal_code' => '',
                 'address'     => '',
                 'building'    => '',

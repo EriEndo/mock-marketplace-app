@@ -22,9 +22,7 @@
             </div>
         </div>
 
-        <a href="{{ route('mypage.profile.edit') }}" class="profile-edit-button">
-            プロフィールを編集
-        </a>
+        <a href="{{ route('mypage.profile.edit', ['from' => 'mypage']) }}" class="profile-edit-button"> プロフィールを編集</a>
     </div>
 
     <div class="mypage-tabs  mypage-tabs--sticky">

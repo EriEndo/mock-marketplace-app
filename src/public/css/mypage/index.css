@@ -7,12 +7,10 @@
 
 .mypage-tabs--sticky {
     position: sticky;
-    top: 70px; /* グローバルヘッダー高さ */
+    top: 70px;
     z-index: 50;
     background: #fff;
-
-    /* 安定化 */
-    height: 48px; /* 明示的に固定 */
+    height: 48px;
     display: flex;
     align-items: center;
 }
@@ -130,13 +128,14 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background: rgba(0, 0, 0, 0.6);
+    background: rgba(0, 0, 0, 0.656);
     color: #fff;
-    font-size: 16px;
+    padding: 14px 28px;
+    font-size: 40px;
     font-weight: bold;
-    padding: 8px 20px;
-    border-radius: 4px;
-    pointer-events: none;
+    border-radius: 8px;
+    z-index: 10;
+    letter-spacing: 2px;
 }
 
 .mypage-item-name {
@@ -177,6 +176,7 @@
     }
 
     .mypage-items {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
     }
 }
