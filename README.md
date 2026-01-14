@@ -98,7 +98,7 @@ sudo chmod -R 777 src/storage
 ### テスト環境用設定ファイルの作成
 
 ```bash
-cp src/.env.testing.example src/.env.testing
+cp .env.testing.example .env.testing
 ```
 
 ### アプリケーションキーの生成（テスト環境）
