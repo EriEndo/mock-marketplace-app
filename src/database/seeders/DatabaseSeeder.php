@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Models\Purchase;
 use App\Models\Item;
@@ -18,6 +19,26 @@ class DatabaseSeeder extends Seeder
             ConditionsTableSeeder::class,
             ProfileImageSeeder::class,
         ]);
+
+        $fixedUser = User::updateOrCreate(
+            ['email' => 'test@example.com'],
+            [
+                'name' => '山田太郎',
+                'password' => Hash::make('password'),
+                'email_verified_at' => now(),
+            ]
+        );
+
+        $fixedUser->profile()->updateOrCreate(
+            ['user_id' => $fixedUser->id],
+            [
+                'username' => 'やまださん',
+                'profile_image' => 'profile_images/banana.png', // 空で良ければ '' でもOK
+                'postal_code' => '123-4567',
+                'address' => '東京都渋谷区神宮前',
+                'building' => '第一ビル',
+            ]
+        );
 
         $users = User::factory()->count(4)->withProfile()->create()
             ->merge(User::factory()->count(4)->withIncompleteProfile()->create());

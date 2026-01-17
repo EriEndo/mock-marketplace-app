@@ -75,13 +75,22 @@ php artisan db:seed
 
 #### 5. 画像アップロード用シンボリックリンク作成
 
+public/storage → storage/app/public のシンボリックリンクが生成されます。
+このリンクは Git に含まれないため、clone した環境では 必ず実行してください。
+
 ```bash
 php artisan storage:link
 ```
 
-- 画像アップロード機能を利用するために必須です。
-- public/storage → storage/app/public のシンボリックリンクが生成されます。
-- このリンクは Git に含まれないため、clone した環境では 必ず実行してください。
+#### 6. Stripe 設定
+
+本アプリでは Stripe を利用した購入処理を実装していますが、Stripe の Secret Key はリポジトリには含めていません。
+テスト環境で購入処理を確認する場合は各自で取得した Stripe のテスト用 Secret Key を.env 内に設定してください。
+※ .env.example にはダミー値のみを記載しています。
+
+```text
+STRIPE_SECRET=your_stripe_secret_key
+```
 
 #### 補足
 
@@ -91,43 +100,13 @@ php artisan storage:link
 sudo chmod -R 777 src/storage
 ```
 
-## テスト環境（.env.testing）
-
-本アプリでは、テスト環境用に `.env.testing` を使用します。
-
-### テスト環境用設定ファイルの作成
-
-```bash
-cp .env.testing.example .env.testing
-```
-
-### アプリケーションキーの生成（テスト環境）
-
-```bash
-php artisan key:generate --env=testing
-```
-
-### Stripe 設定
-
-本アプリでは Stripe を利用した購入処理を実装していますが、
-Stripe の Secret Key はリポジトリには含めていません。
-テスト環境で購入処理を確認する場合は各自で取得した Stripe のテスト用 Secret Key を
-.env.testing に設定してください。
-※ .env.testing.example にはダミー値のみを記載しています。
-
-```text
-STRIPE_SECRET=your_stripe_secret_key
-```
-
 ## ログイン情報
 
-本アプリでは、管理者専用の機能は実装していないため、
-管理者ユーザーは存在しません。
+本アプリでは、管理者専用の機能は実装していないため、管理者ユーザーは存在しません。
+一般ユーザーは、下記のユーザーと、シーディング実行時に複数作成されています。
 
-一般ユーザーは、シーディング実行時に複数作成されます。
-以下のいずれかのユーザーでログインして動作確認が可能です。
-
-- メールアドレス：データベースの users テーブルに登録されている任意のメールアドレス
+- 名前：山田太郎
+- メールアドレス：test@example.com
 - パスワード：password
 
 ## 使用技術（実行環境）
@@ -194,19 +173,19 @@ STRIPE_SECRET=your_stripe_secret_key
 
 ### users テーブル
 
-| カラム名                  | 型              | PK  | NN  | UQ  |
-| ------------------------- | --------------- | --- | --- | --- |
-| id                        | bigint unsigned | ○   |     |     |
-| name                      | varchar(255)    |     | ○   |     |
-| email                     | varchar(255)    |     | ○   | ○   |
-| email_verified_at         | timestamp       |     |     |     |
-| password                  | varchar(255)    |     | ○   |     |
-| two_factor_secret         | text            |     |     |     |
-| two_factor_recovery_codes | text            |     |     |     |
-| two_factor_confirmed_at   | timestamp       |     |     |     |
-| remember_token            | varchar(100)    |     |     |     |
-| created_at                | timestamp       |     |     |     |
-| updated_at                | timestamp       |     |     |     |
+| カラム名                  | 型              | PK  | NN  |
+| ------------------------- | --------------- | --- | --- |
+| id                        | bigint unsigned | ○   |     |
+| name                      | varchar(255)    |     | ○   |
+| email                     | varchar(255)    |     | ○   |
+| email_verified_at         | timestamp       |     |     |
+| password                  | varchar(255)    |     | ○   |
+| two_factor_secret         | text            |     |     |
+| two_factor_recovery_codes | text            |     |     |
+| two_factor_confirmed_at   | timestamp       |     |     |
+| remember_token            | varchar(100)    |     |     |
+| created_at                | timestamp       |     |     |
+| updated_at                | timestamp       |     |     |
 
 ### profiles テーブル
 
@@ -302,85 +281,95 @@ STRIPE_SECRET=your_stripe_secret_key
 | created_at     | timestamp               |     |     |     |          |                                       |
 | updated_at     | timestamp               |     |     |     |          |                                       |
 
-## モデルのリレーション一覧
+## テストの実行方法
 
-### User.php
+本アプリケーションでは、Laravel の PHPUnit を用いてテストを実行します。テストは **テスト専用の環境（.env.testing）** を使用して行われます。  
+すべて **PHP コンテナ内** で実行してください。以下のコマンドでコンテナに入ります。
 
-```php
-    public function items(){return $this->hasMany(Item::class);}
-    public function comments(){return $this->hasMany(Comment::class);}
-    public function likes(){return $this->hasMany(Like::class);}
-    public function purchases(){return $this->hasMany(Purchase::class);}
-    public function profile(){return $this->hasOne(Profile::class);}
+```bash
+docker-compose exec php bash
 ```
 
-### Profile.php
+### 1. テスト環境の設定ファイル作成
 
-```php
-    public function user(){return $this->belongsTo(User::class);}
+```bash
+cp .env.testing.example .env.testing
 ```
 
-### Item.php
+### 2. アプリケーションキーの生成
 
-```php
-    public function user(){return $this->belongsTo(User::class);}
-    public function categories(){return $this->belongsToMany(Category::class, 'category_item');}
-    public function condition(){return $this->belongsTo(Condition::class);}
-    public function comments(){return $this->hasMany(Comment::class);}
-    public function likes(){return $this->hasMany(Like::class);}
-    public function purchase(){return $this->hasOne(Purchase::class);}
+```bash
+php artisan key:generate --env=testing
 ```
 
-### Category.php
+### 3. テスト用データベースのマイグレーション・シーディング
 
-```php
-    public function items(){return $this->belongsToMany(Item::class, 'category_item');}
+```bash
+php artisan migrate:fresh --seed --env=testing
 ```
 
-### Condition.php
+※ このコマンドはテスト用データベースを初期化します。
 
-```php
-    public function items(){return $this->hasMany(Item::class);}
+### 4. Stripe 設定
+
+各自で取得した Stripe のテスト用 Secret Key を.env.testing 内に設定してください。
+※ .env.testing.example にはダミー値のみを記載しています。
+
+```text
+STRIPE_SECRET=your_stripe_secret_key
 ```
 
-### Like.php
+### 5. テストの実行
 
-```php
-    public function user(){return $this->belongsTo(User::class);}
-    public function item(){return $this->belongsTo(Item::class);}
+全テストを実行する場合
+
+```bash
+php artisan test
 ```
 
-### Comment.php
+特定のテストクラスを実行する場合　（例）
 
-```php
-    public function user(){return $this->belongsTo(User::class);}
-    public function item(){return $this->belongsTo(Item::class);}
+```bash
+php artisan test --filter=RegisterTest
 ```
 
-### Purchase.php
+特定のテストメソッドを実行する場合　（例）
 
-```php
-    public function user(){return $this->belongsTo(User::class);}
-    public function item(){return $this->belongsTo(Item::class);}
+```bash
+php artisan test --filter=test_user_can_register
 ```
+
+### 6. 注意事項
+
+- テスト実行時は 必ずテスト用データベース が使用されます
+- 本番用・開発用データベースには影響しません
+- テスト内で作成されるデータは、各テスト終了時に自動的にロールバックされます
 
 ## 実装にかかる補足事項
 
 ### seed データの内容
 
-・マスタデータ（カテゴリ、商品状態）を作成
+- マスタデータ（カテゴリ、商品状態）
 
-・ユーザーおよびプロフィール  
- プロフィールが入力済みのユーザーと、未入力項目を含むユーザーの両方の状態を再現
+- ユーザーおよびプロフィール
 
-・商品  
- ユーザーに紐付いた商品出品データを作成（商品とカテゴリが紐付いた状態）
+  - プロフィールが入力済みのユーザー
+  - 未入力項目を含むユーザー  
+    の両方の状態を再現
 
-・いいね  
- 商品に対するいいねデータを作成
+- 商品
 
-・コメント  
- ユーザーと商品に紐付いたコメントデータを作成
+  - ユーザーに紐付いた商品出品データを作成
+  - 商品とカテゴリが紐付いた状態
 
-・購入  
- 一部商品を購入済み状態（ purchase レコードと紐づけ）として作成
+- いいね
+
+  - 商品に対するいいねデータを作成
+
+- コメント
+
+  - ユーザーと商品に紐付いたコメントデータを作成
+
+- 購入
+  - 一部商品を購入済み状態
+  - purchase レコードと紐づいた状態

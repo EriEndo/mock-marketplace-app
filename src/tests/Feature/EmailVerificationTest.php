@@ -57,7 +57,7 @@ class EmailVerificationTest extends TestCase
             ]
         );
         $response = $this->get($verificationUrl);
-        $response->assertRedirect(route('mypage.profile.edit'));
+        $response->assertRedirect(route('mypage.profile.edit', ['from' => 'first']));
         $this->assertTrue($user->fresh()->hasVerifiedEmail());
     }
 }

@@ -65,7 +65,7 @@ class LoginTest extends TestCase
         ]);
 
         $this->assertAuthenticatedAs($user);
-        $response->assertRedirect('/mypage/profile');
+        $response->assertRedirect(route('mypage.profile.edit', ['from' => 'first']));
     }
 
     public function test_login_redirects_to_items_index_when_profile_is_completed()
