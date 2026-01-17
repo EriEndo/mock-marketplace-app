@@ -84,7 +84,7 @@
                 <h3 class="item-detail__section-title">商品の情報</h3>
 
                 <dl class="item-detail__attributes-list">
-                    <div class="item-detail__attributes-row">
+                    <div class="item-detail__attributes-row is-top">
                         <dt>カテゴリー</dt>
                         <dd>
                             @foreach ($item->categories as $category)
@@ -92,7 +92,7 @@
                             @endforeach
                         </dd>
                     </div>
-                    <div class="item-detail__attributes-row">
+                    <div class="item-detail__attributes-row is-center">
                         <dt>商品の状態</dt>
                         <dd>{{ $item->condition->name }}</dd>
                     </div>

@@ -14,7 +14,10 @@ class PurchaseRequest extends FormRequest
     public function rules()
     {
         return [
-            'payment_method' => ['required']
+            'payment_method' => ['required'],
+            'postal_code' => ['required'],
+            'address' => ['required'],
+            'building' => ['nullable'],
         ];
     }
 
@@ -22,6 +25,14 @@ class PurchaseRequest extends FormRequest
     {
         return [
             'payment_method.required' => '支払い方法を選択してください',
+        ];
+    }
+
+    public function attributes()
+    {
+        return [
+            'postal_code' => '配送先',
+            'address' => '配送先',
         ];
     }
 }

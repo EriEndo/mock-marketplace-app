@@ -52,6 +52,9 @@
                         {{ $address['address'] }}{{ $address['building'] }}
                     </p>
                 </div>
+                @if ($errors->has('postal_code') || $errors->has('address'))
+                <p class="purchase-error">{{ $errors->first('postal_code') ?: $errors->first('address') }}</p>
+                @endif
                 <hr>
             </div>
 

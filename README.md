@@ -55,6 +55,17 @@ DB_USERNAME=laravel_user
 DB_PASSWORD=laravel_pass
 ```
 
+```text
+MAIL_MAILER=smtp
+MAIL_HOST=mailhog
+MAIL_PORT=1025
+MAIL_USERNAME=null
+MAIL_PASSWORD=null
+MAIL_ENCRYPTION=null
+MAIL_FROM_ADDRESS=no-reply@example.com
+MAIL_FROM_NAME="${APP_NAME}"
+```
+
 #### 2. アプリケーションキーの作成
 
 ```bash
@@ -281,7 +292,32 @@ sudo chmod -R 777 src/storage
 | created_at     | timestamp               |     |     |     |          |                                       |
 | updated_at     | timestamp               |     |     |     |          |                                       |
 
+## データベース初期化について（重要）
+
+本アプリケーションでは、MySQL コンテナ起動時に  
+`docker/mysql/initdb.d` 配下の SQL を実行し、必要なデータベースを自動作成しています。
+
+### 自動で作成されるデータベース
+
+- 開発用データベース：`laravel_db`
+- テスト用データベース：`demo_test`
+
+### 初回セットアップ時の注意
+
+MySQL のデータは `docker/mysql/data` に永続化されています。  
+**このディレクトリが存在する場合、初期化 SQL は実行されません。**
+clone 直後や、DB を作り直したい場合は、以下を実行してください。
+この操作により、データベース内のデータはすべて削除されます。
+
+```bash
+docker compose down
+sudo rm -rf docker/mysql/data
+docker compose up -d
+```
+
 ## テストの実行方法
+
+※初回セットアップ時は、事前に「データベース初期化について（重要）」を確認してください。
 
 本アプリケーションでは、Laravel の PHPUnit を用いてテストを実行します。テストは **テスト専用の環境（.env.testing）** を使用して行われます。  
 すべて **PHP コンテナ内** で実行してください。以下のコマンドでコンテナに入ります。
@@ -310,16 +346,7 @@ php artisan migrate:fresh --seed --env=testing
 
 ※ このコマンドはテスト用データベースを初期化します。
 
-### 4. Stripe 設定
-
-各自で取得した Stripe のテスト用 Secret Key を.env.testing 内に設定してください。
-※ .env.testing.example にはダミー値のみを記載しています。
-
-```text
-STRIPE_SECRET=your_stripe_secret_key
-```
-
-### 5. テストの実行
+### 4. テストの実行
 
 全テストを実行する場合
 
@@ -339,7 +366,7 @@ php artisan test --filter=RegisterTest
 php artisan test --filter=test_user_can_register
 ```
 
-### 6. 注意事項
+### 5. 注意事項
 
 - テスト実行時は 必ずテスト用データベース が使用されます
 - 本番用・開発用データベースには影響しません
@@ -352,22 +379,18 @@ php artisan test --filter=test_user_can_register
 - マスタデータ（カテゴリ、商品状態）
 
 - ユーザーおよびプロフィール
-
   - プロフィールが入力済みのユーザー
   - 未入力項目を含むユーザー  
     の両方の状態を再現
 
 - 商品
-
   - ユーザーに紐付いた商品出品データを作成
   - 商品とカテゴリが紐付いた状態
 
 - いいね
-
   - 商品に対するいいねデータを作成
 
 - コメント
-
   - ユーザーと商品に紐付いたコメントデータを作成
 
 - 購入

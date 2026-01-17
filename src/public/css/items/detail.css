@@ -203,7 +203,14 @@
 .item-detail__attributes-row {
     display: flex;
     margin-bottom: 12px;
+}
+
+.item-detail__attributes-row.is-top {
     align-items: flex-start;
+}
+
+.item-detail__attributes-row.is-center {
+    align-items: center;
 }
 
 .item-detail__tag {

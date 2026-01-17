@@ -35,7 +35,7 @@ class ItemController extends Controller
         }
 
         $query->when($keyword, function ($q) use ($keyword) {
-            $q->where('name', 'LIKE', "%{$keyword}%");
+            $q->whereRaw("name COLLATE utf8mb4_bin LIKE ?", ["%{$keyword}%"]);
         });
 
         $items = $query->get();

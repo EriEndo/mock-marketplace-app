@@ -18,13 +18,9 @@
         メール認証を完了してください。
     </p>
 
-    <form method="POST" action="{{ route('verification.send') }}">
+    <form method="POST" action="{{ route('verification.send') }}" class="verify-guide__form">
         @csrf
         <button type="submit" class="verify-guide__button"> 認証はこちらから </button>
-    </form>
-
-    <form method="POST" action="{{ route('verification.send') }}">
-        @csrf
         <button type="submit" class="verify-guide__resend"> 認証メールを再送する </button>
     </form>
 

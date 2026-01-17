@@ -23,7 +23,7 @@ class ProfileRequest extends FormRequest
             'username' => ['required', 'string', 'max:20',],
             'postal_code' => ['required', 'regex:/^\d{3}-\d{4}$/',],
             'address' => ['required', 'string',],
-            'building' => ['nullable',],
+            'building' => ['nullable'],
         ];
     }
 

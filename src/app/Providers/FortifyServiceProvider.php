@@ -16,10 +16,6 @@ use Laravel\Fortify\Fortify;
 use Laravel\Fortify\Contracts\LoginResponse as LoginResponseContract;
 use Laravel\Fortify\Http\Requests\LoginRequest as FortifyLoginRequest;
 use Laravel\Fortify\Contracts\RegisterResponse as RegisterResponseContract;
-
-
-
-
 use App\Models\User;
 
 class FortifyServiceProvider extends ServiceProvider
@@ -59,6 +55,7 @@ class FortifyServiceProvider extends ServiceProvider
 
             return $user;
         });
+
 
         $this->app->singleton(LoginResponseContract::class, LoginResponse::class);
         $this->app->singleton(RegisterResponseContract::class, RegisterResponse::class);
