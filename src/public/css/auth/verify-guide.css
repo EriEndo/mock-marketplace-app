@@ -12,21 +12,19 @@
     margin-bottom: 40px;
 }
 
-.verify-guide__form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
 .verify-guide__button {
-    width: 240px;
-    height: 48px;
+    width: 150px;
+    height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     background-color: #d9d9d9;
     border: 1px solid #999;
     border-radius: 6px;
     font-size: 14px;
     font-weight: bold;
     color: #000;
+    text-decoration: none;
     cursor: pointer;
     margin-bottom: 20px;
 }
@@ -46,12 +44,6 @@
 
 .verify-guide__resend:hover {
     text-decoration: underline;
-}
-
-.verify-guide__notice {
-    font-size: 13px;
-    color: #1a73e8;
-    margin-bottom: 20px;
 }
 
 .verify-guide__notice {

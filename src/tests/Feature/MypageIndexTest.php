@@ -44,7 +44,6 @@ class MypageIndexTest extends TestCase
         $response = $this->get(route('mypage.index'));
         $response->assertSee('出品商品');
         $response->assertDontSee('購入商品');
-
         $response = $this->get(route('mypage.index', ['page' => 'buy']));
         $response->assertSee('購入商品');
     }

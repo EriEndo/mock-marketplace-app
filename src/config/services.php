@@ -34,4 +34,8 @@ return [
         'secret' => env('STRIPE_SECRET'),
     ],
 
+    'mailhog' => [
+        'url' => env('MAILHOG_URL', 'http://localhost:8025'),
+    ],
+
 ];

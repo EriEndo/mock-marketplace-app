@@ -5,10 +5,7 @@ namespace Tests\Feature;
 use Tests\TestCase;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Auth\Notifications\VerifyEmail;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Auth\Events\Verified;
-use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\URL;
 use App\Models\User;
 
@@ -36,18 +33,18 @@ class EmailVerificationTest extends TestCase
     public function test_verification_guide_page_contains_verification_link()
     {
         $user = User::factory()->unverified()->create();
-        $response = $this->actingAs($user)
-            ->get(route('verify.guide'));
-
+        config()->set('services.mailhog.url', 'http://localhost:8025');
+        $response = $this->actingAs($user)->get(route('verify.guide'));
         $response->assertStatus(200);
         $response->assertSee('認証はこちらから');
+        $response->assertSee('href="http://localhost:8025"', false);
+        $response->assertSee('target="_blank"', false);
+        $response->assertSee('rel="noopener"', false);
     }
 
     public function test_user_is_redirected_to_profile_after_email_verification()
     {
-        Event::fake();
         $user = User::factory()->unverified()->create();
-        $this->actingAs($user);
         $verificationUrl = URL::temporarySignedRoute(
             'verification.verify',
             now()->addMinutes(60),
@@ -56,7 +53,7 @@ class EmailVerificationTest extends TestCase
                 'hash' => sha1($user->email),
             ]
         );
-        $response = $this->get($verificationUrl);
+        $response = $this->actingAs($user)->get($verificationUrl);
         $response->assertRedirect(route('mypage.profile.edit', ['from' => 'first']));
         $this->assertTrue($user->fresh()->hasVerifiedEmail());
     }

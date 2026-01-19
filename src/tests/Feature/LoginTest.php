@@ -14,11 +14,11 @@ class LoginTest extends TestCase
 
     public function test_email_is_required()
     {
+        $this->get('/login')->assertStatus(200);
         $response = $this->post('/login', [
             'email' => '',
             'password' => 'password123',
         ]);
-
         $response->assertSessionHasErrors([
             'email' => 'メールアドレスを入力してください',
         ]);
@@ -26,11 +26,11 @@ class LoginTest extends TestCase
 
     public function test_password_is_required()
     {
+        $this->get('/login')->assertStatus(200);
         $response = $this->post('/login', [
             'email' => 'test@example.com',
             'password' => '',
         ]);
-
         $response->assertSessionHasErrors([
             'password' => 'パスワードを入力してください',
         ]);
@@ -38,52 +38,49 @@ class LoginTest extends TestCase
 
     public function test_login_fails_with_invalid_credentials()
     {
+        $this->get('/login')->assertStatus(200);
         User::factory()->create([
             'email' => 'test@example.com',
             'password' => Hash::make('password123'),
         ]);
-
         $response = $this->post('/login', [
             'email' => 'test@example.com',
             'password' => 'wrongpassword',
         ]);
-
         $response->assertSessionHasErrors([
             'login_error' => 'ログイン情報が登録されていません',
         ]);
     }
+
     public function test_login_redirects_to_profile_edit_when_profile_is_not_completed()
     {
+        $this->get('/login')->assertStatus(200);
         $user = User::factory()->create([
             'email' => 'test@example.com',
             'password' => Hash::make('password123'),
         ]);
-
         $response = $this->post('/login', [
             'email' => 'test@example.com',
             'password' => 'password123',
         ]);
-
         $this->assertAuthenticatedAs($user);
         $response->assertRedirect(route('mypage.profile.edit', ['from' => 'first']));
     }
 
     public function test_login_redirects_to_items_index_when_profile_is_completed()
     {
+        $this->get('/login')->assertStatus(200);
         $user = User::factory()->create([
             'email' => 'test2@example.com',
             'password' => Hash::make('password123'),
         ]);
-
         Profile::factory()->create([
             'user_id' => $user->id,
         ]);
-
         $response = $this->post('/login', [
             'email' => 'test2@example.com',
             'password' => 'password123',
         ]);
-
         $this->assertAuthenticatedAs($user);
         $response->assertRedirect('/');
     }
