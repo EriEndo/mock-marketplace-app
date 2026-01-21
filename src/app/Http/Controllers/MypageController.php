@@ -14,10 +14,8 @@ class MypageController extends Controller
     public function index(Request $request)
     {
         $page = $request->query('page', 'sell');
-
         /** @var \App\Models\User $user */
         $user = Auth::user();
-
         switch ($page) {
             case 'buy':
                 $items = Item::whereHas('purchase', function ($query) use ($user) {
@@ -31,7 +29,6 @@ class MypageController extends Controller
                 $items = $user->items()->with('purchase')->get();
                 break;
         }
-
         return view('mypage.index', compact('items', 'page'));
     }
 
@@ -50,17 +47,14 @@ class MypageController extends Controller
             $path = $request->file('profile_image')->store('profile_images', 'public');
             $profile->profile_image = $path;
         }
-
         $profile->username = $request->username;
         $profile->postal_code = $request->postal_code;
         $profile->address = $request->address;
         $profile->building = $request->building;
         $profile->save();
-
         if ($request->from === 'first') {
             return redirect()->route('items.index');
         }
-
         return redirect()->route('mypage.index');
     }
 }

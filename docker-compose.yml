@@ -46,3 +46,10 @@ services:
     ports:
       - "8025:8025"
       - "1025:1025"
+
+  node:
+    image: node:20-alpine
+    working_dir: /var/www
+    volumes:
+      - ./src:/var/www
+    tty: true

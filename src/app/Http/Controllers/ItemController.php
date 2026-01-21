@@ -15,7 +15,6 @@ class ItemController extends Controller
     {
         $tab = $request->query('tab');
         $keyword = $request->query('keyword');
-
         $query = Item::with('purchase');
 
         if (Auth::check()) {
@@ -23,23 +22,19 @@ class ItemController extends Controller
         }
 
         if ($tab === 'mylist') {
-
             if (!Auth::check()) {
                 $items = collect();
                 return view('items.index', compact('items', 'tab'));
             }
-
             $query->whereHas('likes', function ($q) {
                 $q->where('user_id', Auth::id());
             });
         }
-
         $query->when($keyword, function ($q) use ($keyword) {
             $q->whereRaw("name COLLATE utf8mb4_bin LIKE ?", ["%{$keyword}%"]);
         });
 
         $items = $query->get();
-
         return view('items.index', compact('items', 'tab'));
     }
 
@@ -49,7 +44,6 @@ class ItemController extends Controller
             ->withCount('likes')
             ->findOrFail($item_id);
         $comments = $item->comments()->with('user')->get();
-
         return view('items.detail', compact('item', 'comments'));
     }
 
@@ -62,14 +56,12 @@ class ItemController extends Controller
     {
         $categories = Category::all();
         $conditions = Condition::all();
-
         return view('items.create', compact('categories', 'conditions'));
     }
 
     public function store(ExhibitionRequest $request)
     {
         $path = $request->file('image')->store('items', 'public');
-
         $item = Item::create([
             'user_id'     => Auth::id(),
             'name'        => $request->name,
@@ -79,9 +71,7 @@ class ItemController extends Controller
             'image'       => $path,
             'condition_id' => $request->condition_id,
         ]);
-
         $item->categories()->sync($request->categories);
-
         return redirect('/');
     }
 }

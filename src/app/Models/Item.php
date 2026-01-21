@@ -6,12 +6,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
-use App\Models\User;
-use App\Models\Category;
-use App\Models\Condition;
-use App\Models\Comment;
-use App\Models\Like;
-use App\Models\Purchase;
 
 class Item extends Model
 {

@@ -11,11 +11,9 @@ class LikeController extends Controller
     public function toggle($item_id)
     {
         $item = Item::findOrFail($item_id);
-
         $existingLike = Like::where('item_id', $item->id)
             ->where('user_id', Auth::id())
             ->first();
-
         if ($existingLike) {
             $existingLike->delete();
         } else {
@@ -24,7 +22,6 @@ class LikeController extends Controller
                 'user_id' => Auth::id(),
             ]);
         }
-
         return redirect()->back();
     }
 }
