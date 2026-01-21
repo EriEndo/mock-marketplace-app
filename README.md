@@ -55,17 +55,6 @@ DB_USERNAME=laravel_user
 DB_PASSWORD=laravel_pass
 ```
 
-```text
-MAIL_MAILER=smtp
-MAIL_HOST=mailhog
-MAIL_PORT=1025
-MAIL_USERNAME=null
-MAIL_PASSWORD=null
-MAIL_ENCRYPTION=null
-MAIL_FROM_ADDRESS=no-reply@example.com
-MAIL_FROM_NAME="${APP_NAME}"
-```
-
 #### 2. アプリケーションキーの作成
 
 ```bash
@@ -111,15 +100,6 @@ STRIPE_SECRET=your_stripe_secret_key
 sudo chmod -R 777 src/storage
 ```
 
-## ログイン情報
-
-本アプリでは、管理者専用の機能は実装していないため、管理者ユーザーは存在しません。
-一般ユーザーは、下記のユーザーと、シーディング実行時に複数作成されています。
-
-- 名前：山田太郎
-- メールアドレス：test@example.com
-- パスワード：password
-
 ## 使用技術（実行環境）
 
 | カテゴリ       | 技術                    | バージョン |
@@ -137,6 +117,15 @@ sudo chmod -R 777 src/storage
 | ---------- | ---------------------- |
 | Web アプリ | http://localhost       |
 | phpMyAdmin | http://localhost:8080/ |
+
+## ログイン情報
+
+本アプリでは、管理者専用の機能は実装していないため、管理者ユーザーは存在しません。
+一般ユーザーは、下記のユーザーと、シーディング実行時に複数作成されています。
+
+- 名前：山田太郎
+- メールアドレス：test@example.com
+- パスワード：password
 
 ## URL 一覧
 
