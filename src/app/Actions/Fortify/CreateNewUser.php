@@ -21,15 +21,6 @@ class CreateNewUser implements CreatesNewUsers
             'password' => Hash::make($input['password']),
         ]);
 
-        // プロフィール自動作成
-        $user->profile()->create([
-            'username' => $input['name'],
-            'profile_image' => '',
-            'postal_code' => '',
-            'address' => '',
-            'building' => '',
-        ]);
-
         return $user;
     }
 }

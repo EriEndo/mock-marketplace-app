@@ -12,9 +12,9 @@ class RegisterResponse implements RegisterResponseContract
         $user = $request->user();
 
         if ($user instanceof MustVerifyEmail && ! $user->hasVerifiedEmail()) {
-            return redirect()->route('verify.guide');
+            return redirect()->route('verification.notice');
         }
 
-        return redirect()->route('mypage.profile.edit');
+        return redirect()->route('attendance.index');
     }
 }

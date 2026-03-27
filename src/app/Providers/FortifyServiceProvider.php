@@ -17,15 +17,20 @@ use Laravel\Fortify\Contracts\LoginResponse as LoginResponseContract;
 use Laravel\Fortify\Http\Requests\LoginRequest as FortifyLoginRequest;
 use Laravel\Fortify\Contracts\RegisterResponse as RegisterResponseContract;
 use App\Models\User;
+use App\Models\Admin;
+use Laravel\Fortify\Contracts\LogoutResponse as LogoutResponseContract;
+use App\Http\Responses\LogoutResponse;
 
 class FortifyServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
-        //
+        $this->app->singleton(LoginResponseContract::class, LoginResponse::class);
+        $this->app->singleton(RegisterResponseContract::class, RegisterResponse::class);
+        $this->app->singleton(LogoutResponseContract::class, LogoutResponse::class);
     }
 
-    public function boot()
+    public function boot(): void
     {
         Fortify::createUsersUsing(CreateNewUser::class);
 
@@ -33,7 +38,10 @@ class FortifyServiceProvider extends ServiceProvider
             return view('auth.register');
         });
 
-        Fortify::loginView(function () {
+        Fortify::loginView(function (Request $request) {
+            if ($request->is('admin/login')) {
+                return view('admin.auth.login');
+            }
             return view('auth.login');
         });
 
@@ -43,8 +51,7 @@ class FortifyServiceProvider extends ServiceProvider
 
         $this->app->bind(FortifyLoginRequest::class, LoginRequest::class);
 
-        Fortify::authenticateUsing(function ($request) {
-
+        Fortify::authenticateUsing(function (Request $request) {
             $user = User::where('email', $request->email)->first();
 
             if (! $user || ! Hash::check($request->password, $user->password)) {
@@ -55,9 +62,5 @@ class FortifyServiceProvider extends ServiceProvider
 
             return $user;
         });
-
-
-        $this->app->singleton(LoginResponseContract::class, LoginResponse::class);
-        $this->app->singleton(RegisterResponseContract::class, RegisterResponse::class);
     }
 }

@@ -17,10 +17,6 @@ class User extends Authenticatable implements MustVerifyEmail
         'name',
         'email',
         'password',
-        'profile_image',
-        'postal_code',
-        'address',
-        'building',
     ];
 
     protected $hidden = [
@@ -33,24 +29,13 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
     ];
 
-    public function items()
+    public function attendances()
     {
-        return $this->hasMany(Item::class);
+        return $this->hasMany(Attendance::class);
     }
-    public function comments()
+
+    public function correctionRequests()
     {
-        return $this->hasMany(Comment::class);
-    }
-    public function likes()
-    {
-        return $this->hasMany(Like::class);
-    }
-    public function purchases()
-    {
-        return $this->hasMany(Purchase::class);
-    }
-    public function profile()
-    {
-        return $this->hasOne(Profile::class);
+        return $this->hasMany(CorrectionRequest::class);
     }
 }

@@ -1,44 +1,60 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ItemController;
-use App\Http\Controllers\CommentController;
-use App\Http\Controllers\PurchaseController;
-use App\Http\Controllers\MypageController;
-use App\Http\Controllers\LikeController;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\CorrectionRequestController;
 
-Route::get('/', [ItemController::class, 'index'])->name('items.index');
-Route::get('/item/{item_id}', [ItemController::class, 'detail'])->name('items.detail');
-Route::get('/search', [ItemController::class, 'search'])->name('items.search');
+
 
 Route::middleware('auth')->group(function () {
-    Route::get('/verify-guide', function () {
+    Route::get('/email/verify', function () {
         return view('auth.verify-guide');
-    })->middleware('auth')->name('verify.guide');
+    })->name('verification.notice');
 
     Route::post('/email/verification-notification', function (Request $request) {
         $request->user()->sendEmailVerificationNotification();
+
         return back()->with('status', 'verification-link-sent');
-    })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
+    })->middleware('throttle:6,1')->name('verification.send');
 
     Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
         $request->fulfill();
-        return redirect()->route('mypage.profile.edit', ['from' => 'first']);
-    })->middleware(['auth', 'signed', 'throttle:6,1'])->name('verification.verify');
+
+        return redirect()->route('attendance.index');
+    })->middleware(['signed', 'throttle:6,1'])->name('verification.verify');
 });
-Route::middleware(['auth', 'verified'])->group(function () {
-    Route::post('/item/{item_id}/comment', [CommentController::class, 'store'])->name('comment.store');
-    Route::post('/item/{item_id}/like', [LikeController::class, 'toggle'])->name('item.like');
-    Route::get('/purchase/{item_id}', [PurchaseController::class, 'showPurchaseForm'])->name('purchase.form');
-    Route::post('/purchase/{item_id}', [PurchaseController::class, 'purchase'])->name('purchase.execute');
-    Route::get('/purchase/success/{item_id}', [PurchaseController::class, 'success'])->name('purchase.success');
-    Route::get('/purchase/address/{item_id}', [PurchaseController::class, 'showAddressForm'])->name('purchase.address.form');
-    Route::patch('/purchase/address/{item_id}', [PurchaseController::class, 'updateAddress'])->name('purchase.address.update');
-    Route::get('/sell', [ItemController::class, 'create'])->name('sell.create');
-    Route::post('/sell', [ItemController::class, 'store'])->name('sell.store');
-    Route::get('/mypage', [MypageController::class, 'index'])->name('mypage.index');
-    Route::get('/mypage/profile', [MypageController::class, 'editProfile'])->middleware('verified')->name('mypage.profile.edit');
-    Route::patch('/mypage/profile', [MypageController::class, 'updateProfile'])->middleware('verified')->name('mypage.profile.update');
+
+Route::middleware(['auth'])->group(function () {
+
+    Route::get('/attendance', [AttendanceController::class, 'index'])->name('attendance.index');
+    Route::post('/attendance/clock_in', [AttendanceController::class, 'clockIn'])->name('attendance.clock_in');
+    Route::post('/attendance/clock_out', [AttendanceController::class, 'clockOut'])->name('attendance.clock_out');
+    Route::post('/attendance/break_start', [AttendanceController::class, 'breakStart'])->name('attendance.break_start');
+    Route::post('/attendance/break_end', [AttendanceController::class, 'breakEnd'])->name('attendance.break_end');
+
+    Route::get('/attendance/list', [AttendanceController::class, 'list'])->name('attendance.list');
+    Route::get('/attendance/detail/{id}', [AttendanceController::class, 'detail'])->name('attendance.detail');
+    Route::post('/attendance/{attendance}/correction-request', [CorrectionRequestController::class, 'store'])->name('correction_request.store');
+           Route::get('/stamp_correction_request/list', [CorrectionRequestController::class, 'index'])->name('stamp_correction_request.list');
+});
+
+
+
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::middleware('guest:admin')->group(function () {
+        Route::get('/login', [AdminController::class, 'create'])->name('login');
+        Route::post('/login', [AdminController::class, 'store'])->name('login.store');
+    });
+
+    Route::middleware('auth:admin')->group(function () {
+
+        Route::get('/attendance/list', [AdminController::class, 'attendanceList'])->name('attendance.list');
+        Route::get('/attendance/{id}', [AdminController::class, 'attendanceDetail'])->name('attendance.detail');
+
+        Route::get('/stamp_correction_request/list', [AdminController::class, 'correctionRequestList'])
+            ->name('stamp_correction_request.list');
+    });
 });

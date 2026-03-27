@@ -1,0 +1,75 @@
+
+.index-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 300px;
+   font-family: sans-serif;
+
+}
+
+.index-page__inner{
+    display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 16px;
+}
+
+.badge{
+    display: inline-flex;
+    align-items: center;
+    background: #d9d9d9;
+    color: rgb(109, 109, 109);
+    padding: 2px 10px;
+    border-radius: 15px;
+    font-size: 10px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    white-space: nowrap;
+}
+
+#current-date{
+    font-size: 20px;
+}
+
+#current-time{
+    font-size: 48px;
+    font-weight: bold;
+}
+
+.attendance-message{
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.attendance-btn, .attendance-btn--sub{
+    cursor: pointer;
+    display: inline-block;    
+    width: 100%;
+    text-align: center;
+    padding: 7px 40px;
+    box-sizing: border-box;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    text-decoration: none;
+    margin-top: 20px;
+    border: none;
+}
+
+.attendance-btn {
+background: #000;
+    color: #fff;
+}
+
+.attendance-btn--sub{
+    background: #fff;
+    color: #000;
+}
+
+.attendance-action__btns{
+    display: flex;
+    align-items: center;
+    gap:50px;
+}
