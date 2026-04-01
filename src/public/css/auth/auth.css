@@ -1,3 +1,7 @@
+body{
+    background-color: #fff;
+}
+
 .auth__link {
     margin-top: 15px;
     color: #2779bd;

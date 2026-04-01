@@ -2,23 +2,27 @@
 
 @section('title', '申請一覧')
 
+@section('css')
+<link rel="stylesheet" href="{{ asset('css/components/list.css')}}">
+<link rel="stylesheet" href="{{ asset('css/layouts/list.css') }}">
+@endsection
 
 
 @section('table')
 
-<div class="status-tag">
+<div class="list-tabs">
     <a href="{{ route('stamp_correction_request.list', ['status' => 'pending']) }}"
-       class="items-tab {{ request('status', 'pending') === 'pending' ? 'active' : '' }}">
+       class="list-tabs__item {{ request('status', 'pending') === 'pending' ? 'active' : '' }}">
         承認待ち
     </a>
 
     <a href="{{ route('stamp_correction_request.list', ['status' => 'approved']) }}"
-       class="items-tab {{ request('status') === 'approved' ? 'active' : '' }}">
+       class="list-tabs__item {{ request('status') === 'approved' ? 'active' : '' }}">
         承認済み
     </a>
 </div>
 
-<table class="correction-request-list_table">
+<table class="list_table">
     <thead>
         <tr>
             <th>状態</th>

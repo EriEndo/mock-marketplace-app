@@ -24,10 +24,10 @@ class CreateCorrectionRequestsTable extends Migration
                 ->constrained()
                 ->cascadeOnDelete();
 
-            $table->string('status');
+            $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
 
-            $table->dateTime('requested_clock_in')->nullable();
-            $table->dateTime('requested_clock_out')->nullable();
+            $table->time('requested_clock_in')->nullable();
+            $table->time('requested_clock_out')->nullable();
 
                 $table->text('note')->nullable();
 

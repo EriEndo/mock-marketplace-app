@@ -1,7 +1,7 @@
 @extends('layouts.list')
 
 @section('css')
-<link rel="stylesheet" href="{{ asset('css/attendance/list.css')}}">
+<link rel="stylesheet" href="{{ asset('css/components/list.css')}}">
 <link rel="stylesheet" href="{{ asset('css/layouts/list.css') }}">
 @endsection
 
@@ -24,7 +24,7 @@
     </a>
 </div>
 
-<table class="attendance-list_table">
+<table class="list_table">
     <thead>
         <tr>
             <th>日付</th>

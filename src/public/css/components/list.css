@@ -1,0 +1,111 @@
+.date-pagination{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fff;
+}
+
+.date-pagination__link{
+    text-decoration: none;
+    font-size: 14px;
+    color: #7a7a7a;
+    font-weight: bold;
+    padding: 0 20px;
+}
+
+.date-pagination__current {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+     padding: 10px 16px;
+    border-radius: 6px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.calendar-icon {
+    color: #888;
+}
+
+.list-tabs {
+    display: flex;
+    gap: 32px;
+    border-bottom: 1px solid #000;
+    margin-top: 50px;
+}
+
+.list-tabs__item:first-child {
+   padding-left: 50px;
+}
+
+.list-tabs__item {
+    text-decoration: none;
+    font-size: 16px;
+    color: #000;
+   padding: 15px 30px;
+}
+
+
+
+.list-tabs__item.active {
+    color: #000;
+    font-weight: bold;
+}
+
+
+
+.list_table{
+    margin-top: 48px;
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.list_table thead tr{
+    border-bottom: 2px solid #e5e5e5;
+}
+
+.list_table th{
+    padding: 10px 16px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: bold;
+    color: #666;
+    background-color: #fff;
+}
+
+.list_table td{
+    padding: 10px 16px;
+    text-align: center;
+    font-size: 16px;
+    font-weight:600;
+    color: #6b6b6b;
+    border-bottom: 1px solid #e5e5e5;
+    background-color: #fff;
+}
+
+.list_table tbody tr:last-child td{
+    border-bottom: none;
+}
+
+.list_table td a{
+    text-decoration: none;
+}
+
+.admin__detail-btn{
+    font-size: 16px;
+    font-weight: bold;
+    color: #000;
+    text-decoration: none;
+}
+
+.admin__detail-btn:hover{
+    opacity: 0.7;
+}
+
+.list_table tr.empty-row td{
+    color: #bbb;
+}
+

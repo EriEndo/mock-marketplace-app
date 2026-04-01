@@ -1,11 +1,19 @@
 @extends('layouts.list')
 
+@section('css')
+<link rel="stylesheet" href="{{ asset('css/attendance/detail.css')}}">
+<link rel="stylesheet" href="{{ asset('css/layouts/list.css') }}">
+@endsection
+
 @section('title', '勤怠詳細')
 
 @section('table')
 
-<form action="{{ route('correction_request.store', $attendance->id) }}" method="POST">
+<form action="{{ auth('admin')->check() ? route('admin.attendance.update', $attendance->id) : route('correction_request.store', $attendance->id) }}" method="POST">
     @csrf
+    @if (auth('admin')->check())
+        @method('PATCH')
+    @endif
 
     <table class="attendance-detail_table">
         <tr class="detail__row">
@@ -27,10 +35,10 @@
             <td class="detail__data">
                 <div class="detail__time-group">
                     <input type="time" name="clock_in"
-                        value="{{ $attendance->clock_in_at?->format('H:i') }}">
+                        value="{{ old('clock_in', $attendance->clock_in_at?->format('H:i')) }}">
                     <span>～</span>
                     <input type="time" name="clock_out"
-                        value="{{ $attendance->clock_out_at?->format('H:i') }}">
+                        value="{{ old('clock_in', $attendance->clock_out_at?->format('H:i')) }}">
                 </div>
                 @error('clock_in')
                 <p class="error-message">{{ $message }}</p>
@@ -74,20 +82,25 @@
         <tr class="detail__row">
             <th class="detail__label">備考</th>
             <td class="detail__data">
-                <textarea name="note" id="note"></textarea>
+                <textarea name="note" id="note">{{ old('note') }}</textarea>
                 @error('note')
                 <p class="error-message">{{ $message }}</p>
                 @enderror
             </td>
         </tr>
     </table>
-@if($pendingRequest)
-    <p class="pending-message">
-        ※承認待ちのため修正はできません。
-    </p>
-@else
-    <button type="submit">修正</button>
-@endif
+    
+    @if (auth('admin')->check())
+        <button type="submit" class="detail__submit-btn">修正</button>
+    @else
+        @if ($pendingRequest)
+            <p class="pending-message">
+                ※承認待ちのため修正はできません。
+            </p>
+        @else
+            <button type="submit" class="detail__submit-btn">修正</button>
+        @endif
+    @endif
 
 </form>
 

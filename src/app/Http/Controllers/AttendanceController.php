@@ -189,119 +189,116 @@ class AttendanceController extends Controller
     }
 
     public function list(Request $request)
-    {
-        $user = Auth::user();
+{
+    $user = Auth::user();
 
-        $targetMonth = $request->query('month')
-            ? Carbon::createFromFormat('Y-m', $request->query('month'))->startOfMonth()
-            : Carbon::now()->startOfMonth();
+    $targetMonth = $request->query('month')
+        ? Carbon::createFromFormat('Y-m', $request->query('month'))->startOfMonth()
+        : now()->startOfMonth();
 
-        $prevMonth = $targetMonth->copy()->subMonth()->format('Y-m');
-        $nextMonth = $targetMonth->copy()->addMonth()->format('Y-m');
+    $prevMonth = $targetMonth->copy()->subMonth()->format('Y-m');
+    $nextMonth = $targetMonth->copy()->addMonth()->format('Y-m');
 
-        $startOfMonth = $targetMonth->copy()->startOfMonth();
-        $endOfMonth = $targetMonth->copy()->endOfMonth();
+    $startOfMonth = $targetMonth->copy()->startOfMonth();
+    $endOfMonth = $targetMonth->copy()->endOfMonth();
 
-        $attendances = Attendance::with('breakTimes')
-            ->where('user_id', $user->id)
-            ->whereBetween('work_date', [$startOfMonth->toDateString(), $endOfMonth->toDateString()])
-            ->get()
-            ->keyBy(function ($attendance) {
-                return $attendance->work_date->format('Y-m-d');
-            });
+    $attendances = Attendance::with('breakTimes')
+        ->where('user_id', $user->id)
+        ->whereBetween('work_date', [$startOfMonth->toDateString(), $endOfMonth->toDateString()])
+        ->get()
+        ->keyBy(fn($attendance) => $attendance->work_date->format('Y-m-d'));
 
+    $days = [];
 
-        $days = [];
+    foreach (CarbonPeriod::create($startOfMonth, $endOfMonth) as $date){
+        $attendance = $attendances->get($date->format('Y-m-d'));
+        $hasAttendance = (bool) $attendance;
 
-        foreach (\Carbon\CarbonPeriod::create($startOfMonth, $endOfMonth) as $date) {
+        $breakTotalSeconds = $attendance
+            ? $attendance->breakTimes->sum(fn($break) => $this->getBreakSeconds($break))
+            : 0;
 
+        $workTotalSeconds = ($attendance && $attendance->clock_in_at && $attendance->clock_out_at)
+            ? $this->timeToSeconds($attendance->clock_out_at)
+                - $this->timeToSeconds($attendance->clock_in_at)
+                - $breakTotalSeconds
+            : 0;
 
-            $attendance = $attendances->get($date->format('Y-m-d'));
-            $hasAttendance = (bool) $attendance;
-
-            $breakTotalSeconds = 0;
-            if ($attendance) {
-                foreach ($attendance->breakTimes as $break) {
-                    if ($break->break_start_at && $break->break_end_at) {
-                        $breakTotalSeconds += $break->break_start_at
-                            ->diffInSeconds($break->break_end_at);
-                    }
-                }
-            }
-
-
-            $workTotalSeconds = 0;
-
-            if ($attendance && $attendance->clock_in_at && $attendance->clock_out_at) {
-                $workTotalSeconds = $attendance->clock_in_at
-                    ->diffInSeconds($attendance->clock_out_at) - $breakTotalSeconds;
-            }
-
-
-            $days[] = [
-                'row_class' => $hasAttendance ? 'worked-day' : 'empty-day',
-
-                'date_label' => $date->isoFormat('M/D(ddd)'),
-
-                'clock_in' => $attendance?->clock_in_at?->format('H:i') ?? '',
-                'clock_out' => $attendance?->clock_out_at?->format('H:i') ?? '',
-
-                'break_time' => $hasAttendance
-                    ? gmdate('H:i', $breakTotalSeconds)
-                    : '',
-
-
-                'work_time' => ($hasAttendance && $attendance?->clock_out_at)
-                    ? gmdate('H:i', $workTotalSeconds)
-                    : '',
-
-
-                'detail_url' => $attendance
-                    ? route('attendance.detail', $attendance->id)
-                    : '',
-            ];
-        }
-
-        return view('attendance.list', compact(
-            'targetMonth',
-            'prevMonth',
-            'nextMonth',
-            'days'
-        ));
+        $days[] = [
+            'row_class' => $hasAttendance ? 'worked-day' : 'empty-day',
+            'date_label' => $date->isoFormat('M/D(ddd)'),
+            'clock_in' => $attendance?->clock_in_at?->format('H:i') ?? '',
+            'clock_out' => $attendance?->clock_out_at?->format('H:i') ?? '',
+            'break_time' => $hasAttendance ? $this->formatSecondsToHoursMinutes($breakTotalSeconds) : '',
+            'work_time' => ($hasAttendance && $attendance?->clock_out_at)
+                ? $this->formatSecondsToHoursMinutes($workTotalSeconds)
+                : '',
+            'detail_url' => $attendance ? route('attendance.detail', $attendance->id) : '',
+        ];
     }
 
-    public function detail($id)
-    {
-        $attendance = Attendance::with(['breakTimes', 'user'])
-            ->where('id', $id)
-            ->where('user_id', Auth::id())
-            ->firstOrFail();
+    return view('attendance.list', compact(
+        'targetMonth',
+        'prevMonth',
+        'nextMonth',
+        'days'
+    ));
+}
 
-        $breakTotalSeconds = 0;
-
-        foreach ($attendance->breakTimes as $break) {
-            if ($break->break_start_at && $break->break_end_at) {
-                $breakTotalSeconds += $break->break_start_at
-                    ->diffInSeconds($break->break_end_at);
-            }
-        }
-
-        $workTotalSeconds = 0;
-
-        if ($attendance->clock_in_at && $attendance->clock_out_at) {
-            $workTotalSeconds = $attendance->clock_in_at
-                ->diffInSeconds($attendance->clock_out_at) - $breakTotalSeconds;
-        }
-
-        $pendingRequest = CorrectionRequest::where('attendance_id', $id)
-    ->where('status', 'pending')
-    ->exists();
-
-        return view('attendance.detail', compact(
-            'attendance',
-            'breakTotalSeconds',
-            'workTotalSeconds',
-            'pendingRequest'
-        ));
+private function getBreakSeconds($break): int
+{
+    if (!$break->break_start_at || !$break->break_end_at) {
+        return 0;
     }
+
+    return $this->timeToSeconds($break->break_end_at)
+        - $this->timeToSeconds($break->break_start_at);
+}
+
+private function timeToSeconds(Carbon $time): int
+{
+    return $time->hour * 3600 + $time->minute * 60 + $time->second;
+}
+
+private function formatSecondsToHoursMinutes(int $seconds): string
+{
+    return sprintf('%02d:%02d', intdiv($seconds, 3600), intdiv($seconds % 3600, 60));
+}
+
+public function detail($id)
+{
+    $attendance = Attendance::with(['breakTimes', 'user'])
+        ->where('id', $id)
+        ->where('user_id', Auth::id())
+        ->firstOrFail();
+
+    $breakTotalSeconds = $attendance->breakTimes->sum(function ($break) {
+        if (!$break->break_start_at || !$break->break_end_at) {
+            return 0;
+        }
+
+        return $this->timeToSeconds($break->break_end_at)
+            - $this->timeToSeconds($break->break_start_at);
+    });
+
+    $workTotalSeconds = 0;
+
+    if ($attendance->clock_in_at && $attendance->clock_out_at) {
+        $workTotalSeconds = $this->timeToSeconds($attendance->clock_out_at)
+            - $this->timeToSeconds($attendance->clock_in_at)
+            - $breakTotalSeconds;
+    }
+
+    $pendingRequest = CorrectionRequest::where('attendance_id', $id)
+        ->where('status', 'pending')
+        ->exists();
+
+    return view('attendance.detail', compact(
+        'attendance',
+        'breakTotalSeconds',
+        'workTotalSeconds',
+        'pendingRequest'
+    ));
+}
+
 }
